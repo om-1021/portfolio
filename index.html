@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Om Dubey, Software Engineer</title>
+<meta name="description" content="Om Dubey is a software engineer in Bengaluru building reliable data pipelines, distributed systems, and LLM-powered products.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --ink:#efece3;
+    --muted:#8a877e;
+    --accent:#c8ff00;
+    --line:rgba(239,236,227,.14);
+    --serif:"Instrument Serif",Georgia,serif;
+    --sans:"Space Grotesk",-apple-system,BlinkMacSystemFont,sans-serif;
+    --ease:cubic-bezier(.16,1,.3,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--ink);font-family:var(--sans);
+    font-weight:400;line-height:1.5;overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    cursor:none;
+  }
+  ::selection{background:var(--accent);color:#0a0a0a}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,64px)}
+
+  /* grain */
+  .grain{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+  /* cursor */
+  .cursor{position:fixed;top:0;left:0;width:8px;height:8px;background:var(--accent);border-radius:50%;
+    z-index:10000;pointer-events:none;transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease),background .3s}
+  .cursor.grow{width:56px;height:56px;background:rgba(200,255,0,.18);border:1px solid var(--accent)}
+  @media(hover:none){.cursor{display:none}body{cursor:auto}}
+
+  /* loader */
+  .loader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:flex-end;justify-content:space-between;padding:clamp(20px,5vw,64px)}
+  .loader .num{font-family:var(--serif);font-size:clamp(4rem,22vw,20rem);line-height:.8;font-style:italic}
+  .loader .lbl{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding-bottom:1rem}
+  .loader.done{transform:translateY(-100%);transition:transform 1s var(--ease)}
+
+  /* nav */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;mix-blend-mode:difference}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:88px}
+  .brand{font-size:15px;font-weight:600;letter-spacing:-.01em}
+  .brand em{font-family:var(--serif);font-style:italic;font-weight:400}
+  .nav-links{display:flex;gap:36px}
+  .nav-links a{font-size:13px;letter-spacing:.04em;text-transform:uppercase;position:relative;overflow:hidden;height:18px}
+  .nav-links a span{display:block;transition:transform .4s var(--ease)}
+  .nav-links a span::after{content:attr(data-t);position:absolute;left:0;top:100%}
+  .nav-links a:hover span{transform:translateY(-100%)}
+  .nav-toggle{display:none;font-size:13px;letter-spacing:.1em;text-transform:uppercase;background:none;border:0;color:inherit;cursor:none}
+
+  /* hero */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:120px;padding-bottom:60px}
+  .hero-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:clamp(24px,5vh,60px)}
+  .hero-top .tag{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .hero-top .tag b{color:var(--ink);font-weight:500}
+  .hero-top .status{display:flex;align-items:center;gap:9px;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .hero h1{font-size:clamp(3.2rem,13vw,12rem);line-height:.86;font-weight:500;letter-spacing:-.03em;text-transform:uppercase}
+  .hero h1 .r{display:block;overflow:hidden}
+  .hero h1 .r > span{display:block;transform:translateY(105%);transition:transform 1s var(--ease)}
+  .hero h1 .r.in > span{transform:none}
+  .hero h1 em{font-family:var(--serif);font-style:italic;text-transform:none;font-weight:400;color:var(--accent)}
+  .hero-sub{margin-top:clamp(28px,5vh,52px);max-width:560px;font-size:clamp(1rem,1.4vw,1.2rem);color:var(--muted);align-self:flex-end}
+  .hero-sub b{color:var(--ink);font-weight:400}
+
+  /* strip */
+  .marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0;margin:0}
+  .marquee-track{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:0 8px}
+  .marquee-track span{font-family:var(--serif);font-style:italic;font-size:clamp(1.2rem,3vw,2.4rem);margin:0 20px;color:var(--ink)}
+  .marquee-track span.o{color:var(--accent);font-style:normal;font-family:var(--sans);font-weight:300;margin:0 4px}
+
+  /* section shell */
+  section{padding:clamp(80px,14vh,180px) 0}
+  .eyebrow{display:flex;align-items:center;gap:14px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:48px}
+  .eyebrow .n{color:var(--accent);font-family:var(--serif);font-style:italic;font-size:1.3rem}
+  .eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  /* about */
+  .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(32px,6vw,80px);align-items:start}
+  .portrait{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:4px;aspect-ratio:4/5;background:#111}
+  .portrait img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;
+    filter:grayscale(1) contrast(1.08) brightness(.94);transition:filter .7s var(--ease),transform 1.3s var(--ease)}
+  .portrait::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(200deg,rgba(200,255,0,.10),transparent 55%),linear-gradient(0deg,rgba(10,10,10,.55),transparent 45%);
+    mix-blend-mode:screen}
+  .portrait:hover img{filter:grayscale(.2) contrast(1.04) brightness(1);transform:scale(1.045)}
+  .portrait .cap{position:absolute;left:16px;bottom:14px;z-index:2;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);mix-blend-mode:difference}
+  .portrait .cap em{font-family:var(--serif);font-style:italic;text-transform:none;letter-spacing:0;font-size:1.15rem;color:var(--accent);mix-blend-mode:normal}
+  .about-lead{font-family:var(--serif);font-size:clamp(1.6rem,3.4vw,3rem);line-height:1.15;font-weight:400}
+  .about-lead em{font-style:italic;color:var(--accent)}
+  .about-body .about-lead{margin-bottom:30px}
+  .about-body p{color:var(--muted);font-size:1.05rem;margin-bottom:20px}
+  .meta-list{margin-top:36px;border-top:1px solid var(--line)}
+  .meta-row{display:flex;justify-content:space-between;gap:20px;padding:16px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .meta-row .k{color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:12px}
+  .meta-row .v{text-align:right}
+
+  /* work list */
+  .work-list{border-top:1px solid var(--line)}
+  .work-row{display:block;border-bottom:1px solid var(--line);padding:clamp(28px,4vw,44px) 0;position:relative;overflow:hidden}
+  .work-row .fill{position:absolute;inset:0;background:var(--accent);transform:translateY(101%);transition:transform .5s var(--ease);z-index:0}
+  .work-row:hover .fill{transform:translateY(0)}
+  .work-row .inner{position:relative;z-index:1;display:flex;align-items:baseline;justify-content:space-between;gap:20px;transition:color .4s var(--ease),padding .5s var(--ease)}
+  .work-row:hover .inner{color:#0a0a0a;padding:0 clamp(12px,2vw,32px)}
+  .work-row h3{font-size:clamp(1.8rem,6vw,4.5rem);font-weight:500;letter-spacing:-.02em;line-height:1}
+  .work-row h3 em{font-family:var(--serif);font-style:italic;font-weight:400}
+  .work-meta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;text-align:right;flex-shrink:0}
+  .work-meta .yr{font-size:14px;letter-spacing:.05em}
+  .work-meta .tags{font-size:12px;color:var(--muted);letter-spacing:.03em;max-width:280px}
+  .work-row:hover .work-meta .tags{color:#0a0a0a}
+  .work-desc{position:relative;z-index:1;max-width:640px;margin-top:18px;color:var(--muted);font-size:1rem;transition:color .4s var(--ease),padding .5s var(--ease)}
+  .work-row:hover .work-desc{color:#0a0a0a;padding:0 clamp(12px,2vw,32px)}
+  .work-links{position:relative;z-index:1;display:flex;gap:22px;margin-top:16px;font-size:13px;letter-spacing:.05em;text-transform:uppercase;transition:padding .5s var(--ease)}
+  .work-row:hover .work-links{padding:0 clamp(12px,2vw,32px)}
+  .work-links a{border-bottom:1px solid currentColor;padding-bottom:2px}
+
+  /* experience */
+  .xp{display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,5vw,64px)}
+  .xp-row{display:contents}
+  .xp-block{border-top:1px solid var(--line);padding:clamp(28px,4vw,48px) 0}
+  .xp-when{border-top:1px solid var(--line);padding:clamp(28px,4vw,48px) 0;font-size:14px;color:var(--muted);letter-spacing:.03em}
+  .xp-when b{display:block;color:var(--accent);font-family:var(--serif);font-style:italic;font-size:1.4rem;margin-bottom:6px}
+  .xp-block h3{font-size:clamp(1.4rem,3vw,2.2rem);font-weight:500;letter-spacing:-.01em;margin-bottom:6px}
+  .xp-block .role{color:var(--muted);font-size:14px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:22px}
+  .xp-block ul{list-style:none;display:flex;flex-direction:column;gap:14px}
+  .xp-block li{color:var(--muted);font-size:1rem;padding-left:26px;position:relative;max-width:640px}
+  .xp-block li::before{content:"→";position:absolute;left:0;color:var(--accent)}
+
+  /* skills */
+  .skill-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:40px}
+  .skill-col h4{font-family:var(--serif);font-style:italic;font-size:1.5rem;margin-bottom:20px;color:var(--accent)}
+  .skill-col ul{list-style:none;display:flex;flex-direction:column}
+  .skill-col li{padding:11px 0;border-bottom:1px solid var(--line);font-size:15px;color:var(--muted);transition:color .3s,padding-left .3s var(--ease)}
+  .skill-col li:hover{color:var(--ink);padding-left:12px}
+
+  /* contact */
+  .contact{text-align:center;padding-bottom:clamp(60px,10vh,120px)}
+  .contact .eyebrow{justify-content:center}
+  .contact .eyebrow::after{display:none}
+  .contact .big{font-size:clamp(2.4rem,10vw,9rem);line-height:.95;font-weight:500;letter-spacing:-.03em;display:inline-block;margin:10px 0 40px}
+  .contact .big em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent)}
+  .contact .mail{position:relative;display:inline-block}
+  .contact .mail::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease)}
+  .contact .mail:hover::after{transform:scaleX(1);transform-origin:left}
+  .socials{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+  .socials a{border:1px solid var(--line);border-radius:999px;padding:11px 22px;font-size:13px;letter-spacing:.05em;text-transform:uppercase;transition:background .3s,color .3s,border-color .3s}
+  .socials a:hover{background:var(--accent);color:#0a0a0a;border-color:var(--accent)}
+
+  footer{border-top:1px solid var(--line);padding:32px 0}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--muted);letter-spacing:.03em}
+
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:820px){
+    .nav-links{display:none}
+    .about-grid{grid-template-columns:1fr}
+    .portrait{max-width:320px}
+    .xp{grid-template-columns:1fr}
+    .xp-when{border-top:1px solid var(--line);padding-bottom:0;border-bottom:0}
+    .xp-block{border-top:0;padding-top:14px}
+    .work-row .inner{flex-direction:column;gap:10px}
+    .work-meta{align-items:flex-start;text-align:left}
+    .work-meta .tags{max-width:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="cursor"></div>
+
+<div class="loader">
+  <div class="num">0</div>
+  <div class="lbl">Loading Portfolio '26</div>
+</div>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#">Om <em>Dubey</em></a>
+    <div class="nav-links">
+      <a href="#about"><span data-t="About">About</span></a>
+      <a href="#work"><span data-t="Work">Work</span></a>
+      <a href="#experience"><span data-t="Experience">Experience</span></a>
+      <a href="#contact"><span data-t="Contact">Contact</span></a>
+    </div>
+    <div class="brand" style="font-family:var(--serif);font-style:italic">'26</div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div class="tag">Software Engineer<br><b>Bengaluru, India</b></div>
+      <div class="status"><span class="dot"></span> Available for work</div>
+    </div>
+    <h1>
+      <span class="r"><span>Building</span></span>
+      <span class="r"><span><em>reliable</em> systems</span></span>
+      <span class="r"><span>&amp; data at scale</span></span>
+    </h1>
+    <p class="hero-sub">I'm <b>Om</b>, an engineer who turns messy, heterogeneous data into fast, resilient, production-grade workflows. I work across backend, distributed systems, and LLM-powered products.</p>
+  </div>
+</header>
+
+<div class="marquee">
+  <div class="marquee-track">
+    <span>Data Pipelines</span><span class="o">✦</span><span>Distributed Systems</span><span class="o">✦</span><span>LLM Workflows</span><span class="o">✦</span><span>Backend Engineering</span>
+  </div>
+</div>
+
+<section id="about">
+  <div class="wrap reveal">
+    <div class="eyebrow"><span class="n">01</span> About</div>
+    <div class="about-grid">
+      <div class="portrait">
+        <img src="om.png" alt="Portrait of Om Dubey" loading="lazy">
+        <div class="cap">Om Dubey, <em>SWE</em></div>
+      </div>
+      <div class="about-body">
+        <p class="about-lead">I build things <em>end to end</em>, from data-ingestion pipelines and event-driven services to hardening auth and squeezing out performance.</p>
+        <p>I care about reliable, idempotent code that survives the real world: retries, rate limits, checkpoints, and circuit breakers. Lately I've gone deep on LLM-assisted data workflows like structured extraction, embeddings, and hybrid retrieval, while shipping open-source developer tools on the side.</p>
+        <div class="meta-list">
+          <div class="meta-row"><span class="k">Currently</span><span class="v">Software Engineer @ Zeer AI</span></div>
+          <div class="meta-row"><span class="k">Based in</span><span class="v">Bengaluru, India</span></div>
+          <div class="meta-row"><span class="k">Focus</span><span class="v">Backend · Data · Distributed Systems</span></div>
+          <div class="meta-row"><span class="k">Education</span><span class="v">B.Tech IT · CGPA 9.12</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap reveal">
+    <div class="eyebrow"><span class="n">02</span> Selected Work</div>
+    <div class="work-list">
+      <div class="work-row">
+        <div class="fill"></div>
+        <div class="inner">
+          <h3>Free Bulk Delete <em>for Slack</em></h3>
+          <div class="work-meta">
+            <span class="yr">2026 · 5.0★</span>
+            <span class="tags">TypeScript · Preact · Manifest V3 · Slack API · Vitest</span>
+          </div>
+        </div>
+        <p class="work-desc">Open-source Chrome extension for bulk-deleting Slack messages across channels, DMs, and group chats. It's backend-free and local-only, so it reuses your authenticated session with zero accounts, analytics, or external data transfer. It reached 30+ users with a perfect 5.0/5 rating, backed by 52 Vitest cases covering pagination, retries, filters, and cancellation.</p>
+        <div class="work-links">
+          <a href="https://chromewebstore.google.com/detail/biconbdmjlaeplfhbgbmcghkimlnijff" target="_blank" rel="noopener">Chrome Web Store ↗</a>
+          <a href="https://github.com/om-1021/bulk-delete-for-slack" target="_blank" rel="noopener">Source ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap reveal">
+    <div class="eyebrow"><span class="n">03</span> Experience</div>
+    <div class="xp">
+      <div class="xp-row">
+        <div class="xp-when"><b>'26</b>Mar 2026 to Present<br>Remote</div>
+        <div class="xp-block">
+          <h3>Zeer AI</h3>
+          <div class="role">Software Engineer</div>
+          <ul>
+            <li>Built data-ingestion pipelines for B2B intent signals from websites, Excel/CSV, private Slack communities, and social-data sources, normalizing heterogeneous records into PostgreSQL for enrichment and search.</li>
+            <li>Developed a Python Slack ingestion service (Playwright, httpx, SQLAlchemy/Alembic, DBOS) with per-channel checkpoints, lease-based single-runner control, 1,000-row buffered upserts, and retry/backoff for resumable scrapes.</li>
+            <li>Implemented LLM-assisted extraction and classification with OpenAI structured outputs, embeddings, and hybrid retrieval (Qdrant + pgvector), plus evaluation and usage tracking.</li>
+            <li>Engineered resumable, event-driven processing across TypeScript and Python services (BullMQ, Redis, DBOS, PostgreSQL) with idempotent writes, rate-limit handling, retries, and circuit breakers.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="xp-row">
+        <div class="xp-when"><b>'24</b>Oct 2024 to Mar 2026<br>Trivandrum</div>
+        <div class="xp-block">
+          <h3>UST International</h3>
+          <div class="role">Software Development Engineer I</div>
+          <ul>
+            <li>Improved a search API's performance by 60% through pagination and wrote 15+ edge-case tests, raising coverage to 95%.</li>
+            <li>Migrated email notifications from synchronous HTTP to Kafka-based processing, which cut service-call latency from 200ms to 50ms and inter-service latency by 40%.</li>
+            <li>Hardened OAuth 2.0 auth by caching access tokens in Redis, invalidating rotated refresh tokens, and publishing login/logout audit events to a Kafka-backed audit service.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap reveal">
+    <div class="eyebrow"><span class="n">04</span> Toolbox</div>
+    <div class="skill-cols">
+      <div class="skill-col">
+        <h4>Languages</h4>
+        <ul><li>TypeScript</li><li>Python</li><li>Java</li><li>JavaScript</li><li>SQL</li><li>C++</li></ul>
+      </div>
+      <div class="skill-col">
+        <h4>Backend &amp; Data</h4>
+        <ul><li>Node.js</li><li>Spring Boot</li><li>Kafka</li><li>BullMQ · DBOS</li><li>PostgreSQL · Redis</li><li>MongoDB</li><li>Playwright</li><li>SQLAlchemy · Drizzle</li></ul>
+      </div>
+      <div class="skill-col">
+        <h4>Web &amp; Cloud</h4>
+        <ul><li>React · Next.js</li><li>Preact</li><li>AWS S3/Athena</li><li>Docker Compose</li><li>GitHub Actions</li><li>CI/CD</li><li>Vitest · pytest · JMeter</li></ul>
+      </div>
+      <div class="skill-col">
+        <h4>AI &amp; Tools</h4>
+        <ul><li>OpenAI APIs</li><li>Structured Outputs</li><li>Tool Calling</li><li>Embeddings</li><li>Qdrant · pgvector</li><li>Claude Code</li><li>OpenAI Codex</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="wrap reveal">
+    <div class="eyebrow"><span class="n">05</span> Contact</div>
+    <div class="big">Let's build<br><em>something</em> good.</div>
+    <div>
+      <a class="mail" href="mailto:omdubey1021@gmail.com" style="font-size:clamp(1.1rem,2.4vw,1.7rem)">omdubey1021@gmail.com</a>
+    </div>
+    <div class="socials">
+      <a href="https://linkedin.com/in/om1021" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/om-1021" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://leetcode.com/om_1021" target="_blank" rel="noopener">LeetCode</a>
+      <a href="tel:+918473978031">+91 84739 78031</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year"></span> Om Dubey</span>
+    <span>Bengaluru, India</span>
+    <span>Built with care</span>
+  </div>
+</footer>
+
+<script>
+  // custom cursor
+  const cur = document.querySelector('.cursor');
+  let cx=innerWidth/2, cy=innerHeight/2, tx=cx, ty=cy;
+  addEventListener('mousemove', e => { tx=e.clientX; ty=e.clientY; });
+  (function loop(){ cx+=(tx-cx)*.2; cy+=(ty-cy)*.2; cur.style.transform=`translate(${cx}px,${cy}px) translate(-50%,-50%)`; requestAnimationFrame(loop); })();
+  document.querySelectorAll('a,button,.work-row').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cur.classList.add('grow'));
+    el.addEventListener('mouseleave',()=>cur.classList.remove('grow'));
+  });
+
+  // loader
+  const loader=document.querySelector('.loader'), num=loader.querySelector('.num');
+  let p=0;
+  const tick=setInterval(()=>{
+    p+=Math.floor(Math.random()*12)+4;
+    if(p>=100){p=100;clearInterval(tick);
+      num.textContent=100;
+      setTimeout(()=>{loader.classList.add('done');document.querySelectorAll('.hero h1 .r').forEach((r,i)=>setTimeout(()=>r.classList.add('in'),i*120+150));},450);
+    } else num.textContent=p;
+  },120);
+
+  // reveal
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  document.getElementById('year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
